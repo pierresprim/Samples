@@ -1,0 +1,11 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:ExtendedWPFApplication">
+    <Style x:Key="WindowStyle" BasedOn="{StaticResource {x:Type Window}}" TargetType="{x:Type local:Window}">
+        <Style.Triggers>
+            <Trigger Property="IsInHelpMode" Value="true" >
+                <Setter Property="Cursor" Value="Help" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+</ResourceDictionary>

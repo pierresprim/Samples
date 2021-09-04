@@ -20,38 +20,15 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE. */
 
-using System.Windows;
-
 namespace ExtendedWPFApplication
 {
     /// <summary>
-    /// Interaction logic for MainWindow.xaml
+    /// Interaction logic for CloseCommandDisabledWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class CloseCommandDisabledWindow : Window
     {
-        private Window _helpButtonWindow;
-        private Window _closeCommandDisabledWindow;
+        public CloseCommandDisabledWindow() => InitializeComponent();
 
-        public MainWindow()
-        {
-            InitializeComponent();
-
-            DataContext = new MainWindowViewModel();
-        }
-
-        private static void ShowWindow(ref Window window, in RoutedEventArgs e)
-        {
-            static Window getNewWindow() => new CloseCommandDisabledWindow { CloseButton = false };
-
-            ((window ??= getNewWindow()).HasClosed ? window = getNewWindow() : window).Show();
-
-            _ = window.Activate();
-
-            e.Handled = true;
-        }
-
-        private void HelpButtonWindowButton_Click(object sender, RoutedEventArgs e) => ShowWindow(ref _helpButtonWindow, e);
-
-        private void CloseCommandDisabledWindowButton_Click(object sender, RoutedEventArgs e) => ShowWindow(ref _closeCommandDisabledWindow, e);
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e) => CloseButton = !CloseButton;
     }
 }

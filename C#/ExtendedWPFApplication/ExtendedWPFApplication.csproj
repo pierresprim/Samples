@@ -8,10 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WinCopies.Util" Version="3.12.0-preview" />
-    <PackageReference Include="WinCopies.Collections" Version="3.12-preview" />
-    <PackageReference Include="WinCopies.Util.Desktop" Version="3.12-preview" />
+    <PackageReference Include="WinCopies.Collections" Version="3.13-preview" />
     <PackageReference Include="WinCopies.IPCService.Extensions" Version="4.0" />
+    <PackageReference Include="WinCopies.Util" Version="3.13-preview" />
+    <PackageReference Include="WinCopies.Util.Desktop" Version="3.13-preview" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Shell" Version="3.5-preview" />
+    <PackageReference Include="WinCopies.WindowsAPICodePack.Win32Native" Version="3.5-preview" />
   </ItemGroup>
 
 </Project>

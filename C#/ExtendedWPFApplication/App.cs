@@ -116,7 +116,7 @@ namespace ExtendedWPFApplication
         }
     }
 
-    public sealed class SingleInstanceApp_Alt : Extensions.SingleInstanceApp<IQueue<IAltParameters>>
+    public class SingleInstanceApp_Alt : Extensions.SingleInstanceApp<IQueue<IAltParameters>>
     {
         public SingleInstanceApp_Alt(in IQueue<IAltParameters> altParameters) : base(App.AltGuid, altParameters)
         {
@@ -125,8 +125,12 @@ namespace ExtendedWPFApplication
 
         protected override App GetApp()
         {
+            // Load the resource dictionaries used by your app, if any.
+
             var app = new App
             {
+                Resources = App.GetResourceDictionary(),
+
                 MainWindow = new AltModeWindow()
             };
 
@@ -189,9 +193,9 @@ namespace ExtendedWPFApplication
         public const string Default = "Default";
         public const string Alt = "Alt";
 
-        internal IQueue<IAltParameters> _altParametersQueue;
-
         private unsafe delegate void Action(int* i);
+
+        internal IQueue<IAltParameters> _altParametersQueue;
 
         public static string GetAssemblyDirectory() => Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
 
@@ -275,11 +279,17 @@ namespace ExtendedWPFApplication
             arrayBuilder?.Clear();
         }
 
+        internal static ResourceDictionary GetResourceDictionary() => new() { Source = new Uri("ResourceDictionary.xaml", UriKind.Relative) };
+
         public static App GetDefaultApp(IQueue<string> queue)
         {
             var app = new App();
 
             app.OpenWindows = new UIntCountableProvider<Window, IEnumeratorInfo2<Window>>(() => new EnumeratorInfo<Window>(app._OpenWindows), () => app._OpenWindows.Count);
+
+            // Load the resource dictionaries used by your app, if any.
+
+            app.Resources = GetResourceDictionary();
 
             app.MainWindow = new MainWindow();
 
@@ -363,10 +373,6 @@ namespace ExtendedWPFApplication
 
             _OpenWindows.CollectionChanged += OpenWindows_CollectionChanged;
 
-            // Load the resource dictionaries used by your app, if any.
-
-            // Resources = new ResourceDictionary() { Source = new Uri("ResourceDictionary.xaml", UriKind.Relative) };
-
             // Add some code here for your app to initialize if applicable.
 
             if (_altParametersQueue != null)
@@ -390,7 +396,12 @@ namespace ExtendedWPFApplication
                 Current.Dispatcher.Invoke(() => AltCollectionUpdater.Instance.Args.Add(new AltArgument(altQueue.Dequeue().GetParameters().Select(arg => arg.Text).ConcatenateString2())));
         }
 
-        private void OpenWindows_CollectionChanged(object sender, LinkedCollectionChangedEventArgs<Window> e) => Environment.Exit(0);
+        private void OpenWindows_CollectionChanged(object sender, LinkedCollectionChangedEventArgs<Window> e)
+        {
+            if (OpenWindows.Count == 0)
+
+                Environment.Exit(0);
+        }
 
         public class CustomEnumeratorProvider<TItems, TEnumerator> : System.Collections.Generic.IEnumerable<TItems> where TEnumerator : System.Collections.Generic.IEnumerator<TItems>
         {
